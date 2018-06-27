@@ -402,13 +402,13 @@ func (t *task) Checkpoint(ctx context.Context, opts ...CheckpointTaskOpts) (Imag
 		i.Name = fmt.Sprintf(checkpointNameFormat, t.id, time.Now().Format(checkpointDateFormat))
 	}
 	request.ParentCheckpoint = i.ParentCheckpoint
-	if i.Options != nil {
-		any, err := typeurl.MarshalAny(i.Options)
-		if err != nil {
-			return nil, err
-		}
-		request.Options = any
+
+	any, err := typeurl.MarshalAny(i.Options)
+	if err != nil {
+		return nil, err
 	}
+	request.Options = any
+
 	// make sure we pause it and resume after all other filesystem operations are completed
 	if err := t.Pause(ctx); err != nil {
 		return nil, err

@@ -36,11 +36,32 @@ func WithRootFS(mounts []mount.Mount) NewTaskOpts {
 	}
 }
 
+func getCheckpointOptions(r *CheckpointTaskInfo) *runctypes.CheckpointOptions {
+	var opts *runctypes.CheckpointOptions
+	if r.Options == nil {
+		opts = &runctypes.CheckpointOptions{}
+		r.Options = opts
+	} else {
+		opts, _ = r.Options.(*runctypes.CheckpointOptions)
+	}
+	return opts
+}
+
+// WithEmptyNamespace specifies a namespace which is restored externally
+func WithEmptyNamespace(ns string) CheckpointTaskOpts {
+	return func(r *CheckpointTaskInfo) error {
+		opts := getCheckpointOptions(r)
+		opts.EmptyNamespaces = append(opts.EmptyNamespaces, ns)
+
+		return nil
+	}
+}
+
 // WithExit causes the task to exit after a successful checkpoint
 func WithExit(r *CheckpointTaskInfo) error {
-	r.Options = &runctypes.CheckpointOptions{
-		Exit: true,
-	}
+	opts := getCheckpointOptions(r)
+	opts.Exit = true
+
 	return nil
 }
 
