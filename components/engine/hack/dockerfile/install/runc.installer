@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # When updating RUNC_COMMIT, also update runc in vendor.conf accordingly
-RUNC_COMMIT=69663f0bd4b60df09991c08812a60108003fa340
+RUNC_COMMIT=b4e2ecb452d9ee4381137cc0a7e6715b96bed6de
 
 install_runc() {
 	# Do not build with ambient capabilities support
